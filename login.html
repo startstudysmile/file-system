@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>网上登记登陆界面</title>
+		<link rel="stylesheet" type="text/css" href="css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="css/drag.css"/>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/drag.js"></script>
+		<style type="text/css">
+			.login-con{min-width:920px;}
+			/*登陆头部样式*/
+			.login_header{width:100%;height:100px;background: #ffffff;}
+			.login_header .title-con{position:absolute;top:20px;padding-left:80px; font-family:simhei;color: #0668B5;font-size:20px;}
+			.login_header .title-con p{width:100%;}
+			.login_header .title-con p span{margin-left: 60px;}
+			.login_header .search-con{margin-top:20px;margin-right:50px;width:430px;height:46px;line-height: 46px;background: #ffffff;border-radius:23px;border: 1px solid #DDDDDD;}
+			.login_header .search-con img{float:right;margin-top:10px;margin-right:22px;width:24px;cursor: pointer;}
+			.login_header .search-con input{margin-left:20px;width:348px;height:35px;line-height:35px;border: none;background: #ffffff;outline: none;font-family: "微软雅黑";color: #999999;font-size: 16px;}
+			/*登录页面主体部分*/		
+			.login_main{position:absolute;top:100px;bottom:110px;left:0px;right: 0px;min-width:920px;background:#50c0d8 url(img/login-bg.png) no-repeat 60px center;background-size:40%;z-index: 99;}
+			.login-input-con{position:absolute;right:80px;top:20px;padding:10px 20px;width:300px;background:#FFFFFF;}
+			.login-input-con .title-con{width:100%;height:30px;line-height:30px;color: #666;font-size: 13px;text-align: right; cursor: pointer;}
+			.login-input-con .title-con a{color: #000000;}
+			.login-input-con .title-con a:hover{color: #ff0000;}
+			.login-input-con .drag-code-con{margin-top:20px;width:100%;}
+			.login-input-con .drag-code{width:100%!important;}
+			.login-input-con .loginBtn-con{margin-top:20px;width:100%;height: 44px;line-height: 44px;text-align: center;border-radius:3px;cursor: pointer;}
+			.login-input-con .loginBtn-con .login_btn{width: 100%;background: #3090e8;color: #ffffff;border-radius:4px;}
+			.login-input-con .loginBtn-con .login_btn:hover{background:#2d89dd;}
+			.login-input-con .browser-tip{margin-top: 10px;line-height:22px;font-family: "微软雅黑";font-size: 14px;}
+			.login-input-con .browser-tip a{color:#2D89DD}
+				/*input框样式*/
+			.inputList-con{margin-top:10px;width:100%;border:1px solid #E0E0E0;}
+			.inputList-con .input-row{position: relative; width:100%;height: 45px;line-height: 45px;background: #FFFFFF;}
+			.inputList-con .input-row:after{position:absolute;bottom:1px;left:10px;right:10px;content: "";height:1px;background-color: #DDDDDD;}
+			.inputList-con .input-row:last-child:after{background-color:#FFFFFF;}
+			.inputList-con .input-row .fl{width:60px;height: 45px;line-height: 45px;text-indent: 10px;color: #333333;font-size:12px;}
+			.inputList-con .input-row .fl img{margin:10px auto; width:40px;}
+			.inputList-con .input-row .overflow-h .inputBox{margin-right:50px;height: 45px;line-height:40px;}	
+			.inputList-con .input-row .overflow-h .inputBox input{width: 100%;height: 100%;border:0px;outline:none;color:#999999;font-size:12px;}
+			.inputList-con .input-row .overflow-h .inputBox input{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+			/*登录页面底部样式*/
+			.login_footer{position:absolute;bottom:0;left:0px;right:0px;height:110px;min-width:900px; background:#cfcfcf;}
+			.login_footer .footer_logo{padding-left:10%;height:110px;line-height:110px;text-align: center;}
+			.login_footer .footer_logo img{margin-top:25px;margin-right:30px;}
+			.login_footer .nav-con{width:100%;height:32px;line-height:32px;}
+			.login_footer .nav-con li{position:relative;float:left;font-size:15px;cursor: pointer;}
+			.login_footer .nav-con a{color:#000;}
+			.login_footer .nav-con a:hover{color: #4178BE;}
+			.login_footer .declaration-con li{width:100%;}
+			.login_footer .declaration-con li span{margin-right:10px;line-height:32px;font-size: 13px;color: #666;}	
+			.login_footer .declaration-con li span a {color:#666;} 
+			.login_footer .declaration-con li span a:hover {color:#4178BE;}
+		</style>
+	</head>
+	<body class="login-con">
+		<div class="login_header">
+			<div class="fl title-con">
+				<p>文档资料管理系统 <span id="userName"></span>欢迎登录</p>
+				<p>www.lyysl.gov.cn</p>
+			</div>
+			<div class="fr search-con">
+				<img src="http://www.jszwfw.gov.cn/picture/2/1612071441078297655.png"/>
+                <input type="text" name="" id="" placeholder="输入您要的服务" />
+			</div>
+			<div class="cl"></div>
+		</div>
+		<div class="login_main">
+			<ul class="login-input-con ">
+				<li class="title-con">
+					<span><a href="change-psw.html">忘记密码</a></span>
+		  	 		<span>|</span>
+		  	 		<span><a href="register/perregister.do">注册帐号</a></span>
+				</li>
+				<ul class="inputList-con">
+					<li class="input-row">
+						<div class="fl"><img src="img/user.png"/></div>
+						<div class="overflow-h"><div class="inputBox"><input id="loginAccount"  type="text" placeholder="手机号/身份证号" /></div></div>
+						<div class="cl"></div>
+					</li>
+					<li class="input-row">
+						<div class="fl"><img src="img/pass.png"/></div>
+						<div class="overflow-h"><div class="inputBox"><input id="loginPsw" type="password" placeholder="请输入密码" /></div></div>
+						<div class="cl"></div>
+					</li>
+				</ul>
+				
+				<li class="drag-code-con">
+					<div class="drag-code" id="drag"></div>
+				</li>
+				<li class="loginBtn-con" onclick="login()">
+					<div class="login_btn">登陆</div>
+				</li>
+				<li class="browser-tip">
+					浏览器支持：支持IE10或以上版本和支持谷歌浏览器；推荐使用
+					<a href="http://www.baidu.com">谷歌浏览器</a>
+				</li>
+			</ul>
+		</div>
+		<div class="login_footer">
+			<div class="fl footer_logo"><img src="img/footer_logo.png"/></div>
+			<div class="overflow-h">
+				<ul class="nav-con">
+					<li><a href="javascript:void(0)">设为首页</a><span>|</span></li>
+					
+					<li><a href="about-us.html">关于我们</a> <span>|</span></li>
+					
+					<li><a href="statement.html">本站声明</a> <span>|</span></li>
+					
+					<li><a href="contact-us.html">联系我们</a></li>
+				</ul>
+				<ul class="declaration-con">
+					<li>
+						<span>主办：福建臻善信息科技有限公司 版权所有</span>
+	            		<span id="cp_chengban">承办：政务服务管理办公室</span>
+	                	<span><a href="http://www.miitbeian.gov.cn" target="_blank">备案序号：闽ICP备×××××号</a></span>
+					</li>
+					<li>
+						<span>运行管理：龙岩市不动产登记中心</span>
+		                <span>地址：福建省龙岩市新罗区西安南路423</span>
+		                <span>联系电话：0597-2231934</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="js/login.js"></script>
+	<script type="text/javascript">
+		function login(){
+			var loginAccount=$("#loginAccount").val();
+			var loginPsw=$("#loginPsw").val();	
+			console.log(loginAccount+";"+loginPsw)//测试输入框中的值是否存在
+	        $.ajax({
+	        	type:'post',
+		        url:"login.php?action=login",
+		        data:{
+		            'loginAccount':loginAccount,
+		            'loginPsw':loginPsw
+		        },
+		        dataType:'json',
+		        success:function(data){
+		        	console.log(data);
+		        	if(data.code==1){
+		        	   var deptID=data.list[0].dept_id;
+		        	   window.location.href="files.html ";
+		        	}
+		        },
+		        error:function(){   
+		            console.log("异常！");  
+		        } 
+		    });
+		}
+	</script>
+</html>

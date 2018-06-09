@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/common.css"/>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/common.js"></script>
+		<script src="js/files.js"></script>
+		<title>文档资料管理系统</title>
+		<style type="text/css">
+			/*文档菜单样式*/
+			.menu{width: 220px;height:800px;background: #F5F5F5;font-family:simsun;font-size: 14px;color:#848484;}
+			.menu .menu_title{margin-top:50 px;width:100%;height:30px;line-height:30px;text-indent:60px;font-weight: bold;}
+			.docIcon_bg{background:url(img/icon_doc.png) no-repeat 30px center;background-size:16px;}
+			.menu .menuLi{width:100%;height:auto;}
+			.menu .menuLi .menuLi_title{width:100%;height:30px;line-height:30px;text-indent:40px;}
+			.menu .menuLi .menuLi_title:hover{background-color:#FFFFFF;}
+			.menu .menuLi .menuLi_content{width:100%;padding-left:10px;line-height:30px;}
+			.arrowIcon_bg{background:url(img/arrow_close.png) no-repeat 30px center;background-size:5px;}
+			.arrowIcon_active{background-color:#FFFFFF; background:url(img/arrow_show.png) no-repeat 30px center;background-size:5px;}
+			/*.arrowIcon_bg:active{background:url(img/arrow_show.png) no-repeat 30px center;background-size:5px;}*/
+			/*文件系统右边部分样式*/
+			.files{padding-left:20px;}
+			.system_nav{padding-top:40px;width:100%;height:60px;}
+			/*导航搜索框部分样式*/
+			.system_nav .search_con{width:300px;}
+			.system_nav .search_con .fr li{float:left;width:30px;cursor: pointer;}
+			.system_nav .search_con .fr li img{margin:8px 5px;height:12px;}
+			.system_nav .search_con .overflow-h{}
+			.system_nav .search_con .searchBox{overflow:hidden; height:50px;}
+			.system_nav .search_con .searchBox {height:30px;line-height:30px;}
+			.system_nav .search_con .searchBox  input{margin: 0 auto; width:90%;height: 100%;border:none;outline: none;background:url(img/search.png) no-repeat 5px center;background-size: 12px;}
+			.system_nav .search_con .searchBox  input{text-indent: 30px;background-color:#F2F2F2;border-radius:20px;}
+			/*导航功能按钮样式*/
+			.system_nav .overflow-h li{float:left;padding-right:10px;margin:0px 5px; height:30px;line-height:30px;background-color:#FFFFFF;border:1px solid #DDDDDD;border-radius: 5px;font-family: simsun;font-size: 12px;color:#37BBF0;cursor:pointer;}
+			.system_nav .overflow-h li:hover{background-color:#4B8BFA;color:#FFFFFF;}
+		
+			.addFiles_bg{position:relative;padding-left:30px;background:url(img/add_file.png) no-repeat 10px center;background-size:10px;}
+			
+			.addFiles_bg input{position:absolute;top:0;right:0;margin:0;border:solid transparent;opacity:0;filter:alpha(opacity=0);cursor: pointer;}
+
+			.addFiles_bg:hover{}
+			.inputFiles_bg{padding-left:30px;background:url(img/input.png) no-repeat 10px center;background-size:10px;}
+			.inputFiles_bg:hover{}
+			.delFiles_bg{padding-left:30px;background:url(img/delete.png) no-repeat 10px center;background-size:10px;}
+			.delFiles_bg:hover{}
+			.copyFiles_bg{padding-left:30px;background:url(img/copy.png) no-repeat 10px center;background-size:10px;}
+			.copyFiles_bg:hover{}
+			/*所在位置条导航样式*/
+			.position_nav{margin:20px auto; width:100%;height:30px;color:#D5D5D5;font-family:simsun;font-size:14px;}
+			.position_nav a{cursor:pointer;color: #333333;}
+			.position_nav a:active{color:#4B8BFA;}
+			.position_nav a:hover{color:#4B8BFA;text-decoration:underline; }
+			/*文件files样式*/
+			.files-con{margin:5px auto;width:100%;}
+			/*列表模式样式*/
+			.files-con .list_style{z-index:99;font-family:simsun;font-size:12px;}
+			.files-con .list_style .filesLi{position:relative;width: 100%;height:30px;line-height:30px;}
+			.files-con .list_style .filesLi:after{position:absolute;bottom:0px;left:0px;right:0px;content:"";width:100%;height:1px;background-color:#DDDDDD;}		
+			.files-con .list_style .filesLi:hover{background-color:#F5F5F5;}
+			.checkIcon_bg{padding-left: 20px;background:url(img/checkbox0.png) no-repeat 5px center;background-size:12px;}
+			.checkIconActive_bg{padding-left: 20px;background:url(img/checkbox.png) no-repeat 5px center;background-size:12px;}
+			.files-con .list_style .filesLi .fl{text-indent:20px;}
+			.file_type1{padding:0px 10px; background:url(img/1_file.png) no-repeat 10px center;background-size:12px;}
+			.file_type2{padding:0px 10px; background:url(img/1_html.png) no-repeat 10px center;background-size:12px;}
+			.file_type3{padding:0px 10px; background:url(img/1_css.png) no-repeat 10px center;background-size:12px;}
+			.file_type4{padding:0px 10px; background:url(img/1_js.png) no-repeat 10px center;background-size:12px;}
+			.files-con .list_style .filesLi .fr{margin-right: 20px; height: 30px;line-height: 30px;}
+			.files-con .list_style .filesLi .sort-con li{float:left;margin-left:15px;margin-right:20px;padding-right:5px;width:80px;text-align:right; }
+			.gradual_reduce{background:url(img/gradual_reduce.png) no-repeat right center;background-size:3px;cursor: pointer;}
+			.gradual_increase{background:url(img/gradual_add.png) no-repeat right center;background-size:3px;cursor: pointer;}
+			/*图标模式样式*/
+			.icon_style{z-index:99;width:100%;}
+			.icon_style li{float: left;margin: 10px; padding: 15px; width:70px;height:70px;text-align:center;border-radius:6px;cursor: pointer;}
+			.icon_style li:hover{background:url(img/2_checkbox0.png) no-repeat 10px 10px;background-size:10px;background-color:#F5F5F5;}
+			.icon_style li.active{background:url(img/2_checkbox.png) no-repeat 10px 10px;background-size:10px;background-color:#F5F5F5;}
+			.icon_style li.choose{background:url(img/2_checkbox.png) no-repeat 10px 10px;background-size:10px;background-color:#F5F5F5;}
+			.icon_style li img{margin:5px auto;height:35px;}
+			.icon_style li p{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color: #858585;font-family: simsun;font-size: 12px;}
+			/*弹出框样式*/
+			.files_pop{z-index:100;-webkit-box-shadow:#E6E6E6 0px 0px 8px;position:absolute;padding:5px 0px;border:1px solid #DDDDDD;background:#FFFFFF;border-radius:4px;font-family:simsun;font-size:10px;color:#252525;}
+			.files_pop li{position:relative;width:90px;height:24px;line-height:24px;text-align:left;cursor:pointer;text-indent:10px;}
+			.files_pop li.pop-line:after{position:absolute;bottom:0px;left:5px;right:5px;content:"";height:1px;background-color:#DDDDDD;}
+			.files_pop li:hover{background: #E6E6E6;}
+			.files_pop li.hover{background: #E6E6E6;}
+			/*弹出框1样式*/
+			#sortPop{top:80px;right:20px;}
+			#filesPop{position: absolute;}
+			/*弹出框2样式*/
+		</style>
+	</head>
+	<body>
+		<div class="menu fl">
+			<div class="menu_title docIcon_bg">菜单导航</div>
+			<div class="menu_content" id="menuContent"></div>
+		</div>
+		<div class="files overflow-h">
+			<div class="system_nav">
+				<div class="search_con fr">
+					<ul class="fr">
+						<li id="sortPop_btn"><img src="img/sort.png"/></li>
+						<li id="changeModle_btn"><img src="img/modle.png"/></li>
+						<div class="cl"></div>
+					</ul>
+					<div class="overflow-h searchBox" > 
+						<input type="search" name="" id="" value="" placeholder="搜索"/>
+					</div>
+				</div>
+				<ul class="overflow-h">
+					<form action="upload.php" method="post" enctype="multipart/form-data">
+						<li class="addFiles_bg" id="">
+							<span>新增资料</span>
+							<input type="file" name="myfile" id="file" value=""/>
+						</li>
+						<input type="submit" value="提交"/>
+					</form>
+					<li class="addFiles_bg" id="createFiles">新建文件夹</li>
+					<li class="inputFiles_bg">导出</li>
+					<li class="delFiles_bg" id="delFiles">删除</li>
+					<li class="copyFiles_bg" id="copyFiles">复制</li>
+					<div class="cl"></div>
+				</ul>
+				<div class="cl"></div>
+			</div>
+			<div class="position_nav" id="filesNav">
+				<a class="nav_node" id="nav0" navID="0">文件导航</a>
+			</div>
+			<div class="files-con" style="border:0px solid red">
+				<ul class="list_style" id="list_style"  style="display:block;">
+					<li class="filesLi checkIcon_bg" onclick="checked(this)">	
+						<div class="fl">文件名</div>
+						<ul class="fr sort-con clearfix">
+							<li class="gradual_reduce" id="sortSize">大小</li>
+							<li class="gradual_reduce" id="sortAuthor">创建人</li>
+							<li class="gradual_reduce" id="sortDate">创建日期</li>
+						</ul>
+					</li>
+					<div id="list_style_main">	
+					</div>
+					
+				</ul>
+				<ul class="icon_style" id="icon_style" style="display: none;"></ul>
+				<div class="cl"></div>
+			</div>
+		</div>
+		<div class="cl"></div>
+		<ul class="files_pop" id="filesPop" style="display:none;">
+			<li>打开</li>
+			<li class="pop-line">导出</li>
+			<li>重命名</li>
+			<li class="pop-line">删除</li>
+			<li>复制</li>
+			<li>新建文件夹</li>
+		</ul>
+		<ul class="files_pop" id="sortPop" style="display:none;">
+			<li class="pop-line">排序方式</li>
+			<li id="fileSize">文件大小</li>
+			<li id="fileType">文件类型</li>
+			<li id="fileTime">创建时间</li>
+			<li id="fileAuthor">创建人</li>
+		</ul>
+	</body>
+	
+	<script type="text/javascript">	
+		$(document).ready(function(){
+		document.oncontextmenu = function(e){   //去掉默认的contextmenu事件，否则会和右键事件同时出现。
+            e.preventDefault();
+        };
+		var Modles=true;
+		var currentId;
+		menu_show(0);
+		menu_toggle(); 
+		nav_del();
+		openFile();
+		modle_change();
+		pop_toggle();
+		sort_way();
+		function file_download(){
+			$.ajax({
+				type:"post",
+				url:"download.php",
+				async:true,
+				dataType:'json',
+				success:function(data){
+					
+				},
+				error:function(){
+					
+				}
+			});
+		}
+		//菜单显示
+		function menu_show(menuID){
+			$.ajax({	
+				url:"files.php?action=menu_show",
+				type:"post",
+				async:true,
+				dataType:'json',
+				data:{
+					'menuID':menuID
+				},
+				success:function(data){
+					if(data.code==1){
+						if(menuID==0){
+							var menuLi_html='';
+							for(var i=0;i<data.list.length;i++){
+							 	menuLi_html+='<div id="menuLi'+data.list[i].id+'"  topID="'+data.list[i].top_id+'"   class="menuLi" ><div class="menuLi_title arrowIcon_bg" menuID="'+data.list[i].id+'" onclick="">'+data.list[i].menu_name+'</div></div>';
+							}
+							$("#menuContent").html(menuLi_html);	
+						}
+						if(menuID>0){
+							var menuSub_html='';
+			                for (var i=0;i<data.list.length;i++){
+			                	var menuNodeDiv=document.createElement("div");
+								menuNodeDiv.setAttribute("class","menuLi_content");
+			                	menuSub_html+='<div id="menuLi'+data.list[i].id+'" topID="'+data.list[i].top_id+'"  class="menuLi"><div class="menuLi_title arrowIcon_bg"  menuID="'+data.list[i].id+'" onclick="">'+data.list[i].menu_name+'</div></div>';
+			                } 
+			            	menuNodeDiv.innerHTML=menuSub_html;
+			           		$('#menuLi'+menuID+'').append(menuNodeDiv); 
+						}
+					}
+					
+				},
+				error:function(){
+					console.log("系统异常！");
+				}
+			});
+		}
+		//菜单显示与隐藏
+		function menu_toggle(){
+			$("body").on("click",".menuLi_title",function(){
+				var currentID=$(this).attr("menuID");
+				currentId=$("#filesNav a:last-child").attr("navID");
+				if($(this).siblings(".menuLi_content").length>0){		
+		            $(this).siblings(".menuLi_content").remove();
+		            
+			 	}else{	
+		 			menu_show(currentID);
+		 			files_show(0,0);
+			 	}
+				if($(this).attr("class")=="menuLi_title arrowIcon_active"){
+					$(this).attr("class","menuLi_title arrowIcon_bg");
+				}else{
+					$(this).attr("class","menuLi_title arrowIcon_active");			
+				}
+			});
+		}
+		//文件显示
+		function files_show(filesID,sortID){//表示点击的那个ID
+			var files_listModel_html='';
+            var files_iconModel_html='';
+	 		$.ajax({
+		        url:"files.php?action=files_show",
+		        data:{
+		            'filesID':filesID,
+		            'sortID':sortID
+		        },
+		        type:'post',
+		        dataType:'json',
+		        success:function(data){
+		        	if(data.code==2){
+		        		switch(Modles){
+	                		case true:
+		                    	document.getElementById("list_style_main").innerHTML="";
+	                			break;
+	                		case false:
+	                			document.getElementById("icon_style").innerHTML="";
+	                			break;
+	                	}
+		        	}
+		        	if(data.code==1){
+		        		switch(Modles){
+	                		case true:           		
+					           	for(var i=0;i<data.list.length;i++){
+		                    		files_listModel_html+='<li class="filesLi checkIcon_bg"  filesID="'+data.list[i].id+'" file_name="'+data.list[i].file_name+'" file_type="'+data.list[i].type_id+'" file_size="'+data.list[i].size+'" file_topID="'+data.list[i].top_id+'" onclick="checked(this)">';
+							        files_listModel_html+='<div class="fl fileTitle file_type'+data.list[i].type_id+'">'+data.list[i].file_name+'</div>';
+							        files_listModel_html+='<ul class="fr sort-con clearfix"><li class="file_size" id="size'+data.list[i].id+'">'+data.list[i].size+'</li><li class="file_author" id="author'+data.list[i].id+'">'+data.list[i].author+'</li><li class="file_time" id="time'+data.list[i].id+'">'+data.list[i].create_time+'</li></ul></li>';  
+		                       	}  
+		                    	document.getElementById("list_style_main").innerHTML=files_listModel_html;
+	                			break;
+	                		case false:
+		                		for (var i=0;i<data.list.length;i++){ 
+	                    			files_iconModel_html+='<li class="filesLi" filesID="'+data.list[i].id+'" file_name="'+data.list[i].file_name+'" file_type="'+data.list[i].type_id+'" file_size="'+data.list[i].size+'" file_topID="'+data.list[i].top_id+'"><img src="img/imgtype'+data.list[i].type_id+'.png"/><p class="fileTitle">'+data.list[i].file_name+'</p></li>';
+	                      		}  
+	                   			document.getElementById("icon_style").innerHTML=files_iconModel_html;
+	                			break;
+	                	}
+		        	}
+                	
+		       },
+		        error:function() {   
+		            console.log("显示子菜单失败！！");  
+		        }   
+		    });
+		}	
+		//文件排序
+		function sort_way(){
+			$("#fileSize").on("click",function(){
+				currentId=$("#filesNav a:last-child").attr("navID");
+				files_show(currentId,1);
+			});
+			$("#fileType").on("click",function(){
+				currentId=$("#filesNav a:last-child").attr("navID");	
+				files_show(currentId,2);
+			});
+			$("#fileAuthor").on("click",function(){
+				currentId=$("#filesNav a:last-child").attr("navID");	
+				files_show(currentId,3);
+			});
+			$("#fileTime").on("click",function(){
+				currentId=$("#filesNav a:last-child").attr("navID");
+				files_show(currentId,4);
+			});
+			$("body").on("click","#sortSize",function(e){
+				currentId=$("#filesNav a:last-child").attr("navID");
+				if($(this).attr("class")=="gradual_reduce"){
+					$(this).attr("class","gradual_increase");
+					files_show(currentId,5);		
+				}else{
+					$(this).attr("class","gradual_reduce");
+					files_show(currentId,1);	
+				}
+			});
+			$("body").on("click","#sortAuthor",function(e){
+				currentId=$("#filesNav a:last-child").attr("navID");
+				if($(this).attr("class")=="gradual_reduce"){
+					$(this).attr("class","gradual_increase");
+					files_show(currentId,6);
+				}else{
+					$(this).attr("class","gradual_reduce");
+					files_show(currentId,3);
+				}
+			});
+			$("body").on("click","#sortDate",function(e){
+				if($(this).attr("class")=="gradual_reduce"){
+					$(this).attr("class","gradual_increase");
+					files_show(currentId,4);
+				}else{		
+					$(this).attr("class","gradual_reduce");
+					files_show(currentId,7);
+				}
+			});
+		}
+		//打开文件夹
+		function openFile(){
+			$("body").on("dblclick",".filesLi",function(e){
+				var currentId=$(this).attr("filesID");	
+				var currentText=$(this).attr("file_name");
+				var file_type=$(this).attr("file_type");
+				if(file_type==1){
+                  	files_show(currentId);
+					nav_create(currentId,currentText);
+				}else{
+					return false;
+				}
+		   });
+		}
+		//控制文件显示样式
+		function modle_change(){
+			$("#changeModle_btn").click(function(){
+				currentId=$("#filesNav a:last-child").attr("navID");
+				if(Modles==true){
+					files_show(currentId,0);
+				    $("#icon_style").show();
+				    $("#list_style").hide();
+				    Modles=false;
+				}else{	
+					files_show(currentId,0);
+					$("#list_style").show();
+				    $("#icon_style").hide();
+				    Modles=true;
+				}
+			});
+		}
+		//导航条的创建
+		function nav_create(navID,navTitle){
+			var nav_nodes=document.getElementById("filesNav").children;
+	    	var nodes_num=nav_nodes.length;
+			var nav_html='<a class="nav_node" id="nav'+navID+'" navID="'+navID+'"> > '+navTitle+'</a>';
+			document.getElementById("filesNav").innerHTML+=nav_html;	
+		}
+		//导航条删除
+		function nav_del(){
+			$("body").on("click",".nav_node",function(){
+				var id= $(this).attr("id");
+				var navID=$(this).attr("navID");
+				$("#"+id+"").nextAll().remove();
+				files_show(navID);
+			});
+		}
+		//弹出框显示与隐藏
+		function pop_toggle(){
+			//文件弹出框显示 与隐藏
+			$("body").on("mousedown",".filesLi",function(e){
+				var key = e.which;//获取鼠标键位 
+		    	if(key == 3){
+		    		//获取右键点击坐标  
+			        var x = e.clientX;  
+			        var y = e.clientY; 
+			        $("#filesPop").css("left",x+20+"px");
+		            $("#filesPop").css("top",y+"px");
+				    $("#filesPop").show();
+		    	}else{
+		            $("#filesPop").hide();
+		    	}
+			});
+			//点击自身隐藏
+			$(document).click(function() {
+				$("#filesPop").hide();
+			});
+			//排序弹出框显示 与隐藏
+			$("#sortPop_btn").on("click",function(e){
+				$("#sortPop").show();
+				$(document).one("click",function(){
+					$("#sortPop").hide();
+				});
+				e.stopPropagation();
+			});
+			//点击自身隐藏
+			$("#sortPop").on("click",function(e){
+				$("#sortPop").hide();
+				e.stopPropagation();
+			});
+		}	
+		//新建文件夹
+		function files_create(navID){
+			$.ajax({	
+				url:"files.php?action=files_create",
+				type:"post",
+				async:true,
+				dataType:'json',
+				data:{
+					'top_id':navID
+				},
+				success:function(data){
+					if(data.code==1){
+	                	files_show(navID,0);
+					}
+				},
+				error:function(){
+					console.log("系统异常！");
+				}
+			});
+		}
+		$("#createFiles").on("click",function(e){
+			alert(1)
+			currentId=$("#filesNav a:last-child").attr("navID");
+			files_create(currentId);
+		});
+		//删除文件
+		function files_del(navID,delFilesID){
+			$.ajax({	
+				url:"files.php?action=files_del",
+				type:"post",
+				async:true,
+				dataType:'json',
+				data:{
+					'delFilesID':delFilesID
+				},
+				success:function(data){
+					if(data.code==1){
+	                	files_show(navID,0);
+					}
+				},
+				error:function(){
+					console.log("系统异常！");
+				}
+			});
+		}
+		$("#delFiles").on("click",function(e){
+			alert(1)
+			var arrayChecked=new Array();
+			var checkID=new Array();
+			currentId=$("#filesNav a:last-child").attr("navID");
+			arrayChecked=$(".checkIconActive_bg");
+			for (var i=0;i<arrayChecked.length;i++) {
+				checkID[i]=arrayChecked[i].getAttribute("filesID");
+				console.log(checkID[i]);
+			}
+			files_del(currentId,checkID);
+		});
+		//文件复制功能
+		function files_copy(navID,copyTopID,copyFilesName,copyTypeID,copySize){
+			$.ajax({	
+				url:"files.php?action=files_copy",
+				type:"post",
+				async:true,
+				dataType:'json',
+				data:{
+					'copyTopID':copyTopID,
+					'copyFilesName':copyFilesName,
+					'copyTypeID':copyTypeID,
+					'copySize':copySize,
+				},
+				success:function(data){
+					if(data.code==1){
+	                	files_show(navID,0);
+					}
+				},
+				error:function(){
+					console.log("系统异常！");
+				}
+			});
+		}
+		$("#copyFiles").on("click",function(){
+			alert(1)
+			var arrayChecked=new Array();
+			var checkedTopID=new Array();
+			var checkedFilesName=new Array();
+			var checkedTypeID=new Array();
+			var checkedSize=new Array();
+			currentId=$("#filesNav a:last-child").attr("navID");
+			arrayChecked=$(".checkIconActive_bg");
+			for (var i=0;i<arrayChecked.length;i++) {
+				checkedTopID[i]=arrayChecked[i].getAttribute("file_topID");
+				checkedFilesName[i]=arrayChecked[i].getAttribute("file_name");
+				checkedTypeID[i]=arrayChecked[i].getAttribute("file_type");
+				checkedSize[i]=arrayChecked[i].getAttribute("file_size");
+			}
+			files_copy(currentId,checkedTopID,checkedFilesName,checkedTypeID,checkedSize);
+		});
+
+	});
+	</script>
+</html>
